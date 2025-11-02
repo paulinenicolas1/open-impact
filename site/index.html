@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; margin: 24px; }
+        .grid { display: grid; gap: 24px; grid-template-columns: 1fr; }
+        @media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+        .card { padding: 16px; border: 1px solid #eee; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,.04); }
+    </style>
+</head>
+<body>
+<h1>📊 Mon dashboard</h1>
+<div class="grid">
+    <div class="card">
+        <h2>Revenus mensuels</h2>
+        <canvas id="chart-revenu"></canvas>
+    </div>
+    <div class="card">
+        <h2>Utilisateurs</h2>
+        <canvas id="chart-users"></canvas>
+    </div>
+</div>
+
+<script>
+    async function main() {
+      const res = await fetch("../data/series.json");  // chemin depuis /site vers /data
+      const d = await res.json();
+
+      new Chart(document.getElementById('chart-revenu'), {
+        type: 'line',
+        data: {
+          labels: d.labels,
+          datasets: [{
+            label: 'Revenu (€)',
+            data: d.revenu,
+            borderColor: '#3b82f6',
+            tension: 0.3
+          }]
+        }
+      });
+
+      new Chart(document.getElementById('chart-users'), {
+        type: 'bar',
+        data: {
+          labels: d.labels,
+          datasets: [{
+            label: 'Utilisateurs',
+            data: d.users,
+            backgroundColor: '#10b981'
+          }]
+        },
+        options: { plugins: { legend: { display: true } } }
+      });
+    }
+    main();
+</script>
+</body>
+</html>

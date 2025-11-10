@@ -1,4 +1,5 @@
-name: Build & Deploy Pages
+name: Build & Deploy to GitHub Pages
+
 on:
   push:
     branches: [ main ]
@@ -17,20 +18,31 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Generate data
+
+      - name: Install deps
         run: |
-          python make_data.py
-      - name: Prepare static site
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install plotly pandas; fi
+
+      - name: Generate site with Python
         run: |
-          mkdir -p dist
-          cp -R site/* dist/
-          cp -R data dist/data
-      - uses: actions/upload-pages-artifact@v3
+          python make_dashboard.py
+
+      - name: Copy static assets (if any)
+        run: |
+          if [ -d site ]; then cp -R site/* dist/; fi
+          # Empêche Jekyll d’ignorer des dossiers commençant par '_' (facultatif)
+          touch dist/.nojekyll
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
@@ -40,4 +52,5 @@ jobs:
     environment:
       name: github-pages
     steps:
-      - uses: actions/deploy-pages@v4
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4

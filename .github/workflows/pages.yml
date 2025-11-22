@@ -1,9 +1,8 @@
-name: Build & Deploy to GitHub Pages (Sanity)
-
+name: Build & Deploy Pages
 on:
   push:
-    branches: ['**']   # déclenche sur TOUTES les branches
-  workflow_dispatch:   # bouton "Run workflow"
+    branches: [ main ]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -19,21 +18,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: |
-          mkdir -p dist
-          cat > dist/index.html <<'HTML'
-          <!doctype html><meta charset="utf-8">
-          <title>It works 🚀</title>
-          <h1>It works 🚀</h1>
-          <p>Publié via GitHub Actions.</p>
-          HTML
-          touch dist/.nojekyll
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          export PATH="$HOME/.local/bin:$PATH"
+          uv --version
+      - name: Sync dependencies with uv
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          uv sync
+      - name: Generate data
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          uv run python scripts/make_data.py
+      - name: Prepare static site
+        run: |
+          # dist/ contient déjà index.html
+          ls -lah dist
+          touch dist/.nojekyll   # évite Jekyll, au cas où
       - uses: actions/upload-pages-artifact@v3
-        with: { path: dist }
+        with:
+          path: dist
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    environment: { name: github-pages }
+    environment:
+      name: github-pages
     steps:
       - uses: actions/deploy-pages@v4

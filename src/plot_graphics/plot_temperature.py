@@ -3,13 +3,16 @@ import pandas as pd
 from plotly.graph_objs._figure import Figure
 
 
-def plot_temperature(df: pd.DataFrame) -> Figure:
+def plot_temperature(df: pd.DataFrame,
+                     year_column: str = 'year',
+                     temperature_column: str = 'temperature',
+                     title: str = "Température moyenne annuelle (°C)") -> Figure:
     fig = px.line(
         df,
-        x="mois",
-        y="temperature",
+        x=year_column,
+        y=temperature_column,
         markers=True,
-        title="Température moyenne mensuelle (°C)",
+        title=title,
     )
 
     # 3) Personnalisation du graphe

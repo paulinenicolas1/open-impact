@@ -31,10 +31,9 @@ jobs:
         run: |
           export PATH="$HOME/.local/bin:$PATH"
           uv sync
-      - name: Generate data
-        run: |
-          export PATH="$HOME/.local/bin:$PATH"
-          uv run python scripts/make_data.py
+      - name: Run make_data
+        run: uv run python -m scripts.make_data
+        working-directory: ${{ github.workspace }}
       - name: Prepare static site
         run: |
           # dist/ contient déjà index.html

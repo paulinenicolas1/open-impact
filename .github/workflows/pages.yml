@@ -31,7 +31,7 @@ jobs:
         run: |
           export PATH="$HOME/.local/bin:$PATH"
           uv sync
-      - name: Run make_data
+      - name: Run main
         run: uv run python -m src.main
         working-directory: ${{ github.workspace }}
       - name: Prepare static site

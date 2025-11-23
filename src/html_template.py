@@ -3,7 +3,7 @@ def build_html_template(fig) -> str:
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <title>Températures mensuelles</title>
+  <title>Températures années après années</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {{

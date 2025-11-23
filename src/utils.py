@@ -68,6 +68,7 @@ def yearly_mean(
     yearly_mean = (
         subset.groupby("year")[temp_column]
         .mean()
+        .round(1)
         .reset_index()
         .rename(columns={temp_column: "yearly_mean_temperature"})
     )

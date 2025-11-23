@@ -6,13 +6,14 @@ from plotly.graph_objs._figure import Figure
 def plot_temperature(df: pd.DataFrame,
                      year_column: str = 'year',
                      temperature_column: str = 'temperature',
-                     title: str = "Température moyenne annuelle (°C)") -> Figure:
+                     title: str = "Température moyenne annuelle (°C)",
+                     location: str = 'Parc Montsouris') -> Figure:
     fig = px.line(
         df,
         x=year_column,
         y=temperature_column,
         markers=True,
-        title=title,
+        title=title + " - " + location,
     )
 
     # 3) Personnalisation du graphe
@@ -24,7 +25,7 @@ def plot_temperature(df: pd.DataFrame,
 
     fig.update_layout(
         template="plotly_white",
-        xaxis_title="Mois",
+        xaxis_title="Année",
         yaxis_title="Température (°C)",
         font=dict(family="system-ui, -apple-system, BlinkMacSystemFont, sans-serif", size=14),
         title=dict(x=0.5, xanchor="center"),  # centrer le titre

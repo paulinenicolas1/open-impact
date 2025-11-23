@@ -45,6 +45,7 @@ def main():
     dist_dir.mkdir(parents=True, exist_ok=True)
 
     html_path = os.path.join(dist_dir, "index.html")
+    html_path = pathlib.Path(html_path)
 
     HTML_TEMPLATE = build_html_template(fig)
 

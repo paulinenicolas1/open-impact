@@ -6,9 +6,12 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "altair>=6.0.0",
+    "click>=8.3.1",
     "pandas>=2.3.3",
     "plotly>=6.3.1",
     "pytest>=8.4.2",
+    "pyyaml>=6.0.3",
+    "rich>=14.2.0",
 ]
 
 [dependency-groups]
@@ -24,3 +27,6 @@ dev = [
 [tool.pytest.ini_options]
 minversion = "8.0"
 testpaths = ["tests"]
+
+[project.scripts]
+meteo = "cli.cli:main"

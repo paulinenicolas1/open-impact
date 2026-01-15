@@ -4,8 +4,8 @@ import pandas.testing as pdt
 import numpy as np
 
 
-import src.data_processing.build_weather_datasets as build_weather_datasets
-from src.data_processing.build_weather_datasets import add_ma5, build_yearly
+import data_processing.build_weather_datasets as build_weather_datasets
+from data_processing.build_weather_datasets import add_ma5, build_yearly
 
 
 def test_add_ma5_basic():

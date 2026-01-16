@@ -3,60 +3,284 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Climate France</title>
     <style>
-        body { font-family: system-ui, -apple-system, sans-serif; margin: 24px; }
-        .grid { display: grid; gap: 24px; grid-template-columns: 1fr; }
-        @media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
-        .card { padding: 16px; border: 1px solid #eee; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,.04); }
+        :root {
+            color-scheme: dark;
+            --bg: #0f1116;
+            --panel: #1a1f28;
+            --panel-soft: #202630;
+            --text: #f5f6f8;
+            --muted: #a7b0bf;
+            --accent: #34b4ff;
+            --accent-strong: #0f7fbf;
+            --border: #2a323f;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+            background: radial-gradient(circle at top, #1a202c 0%, #0f1116 40%, #0c0f14 100%);
+            color: var(--text);
+        }
+
+        .page {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 28px 24px 48px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            justify-content: space-between;
+            background: #12161f;
+            border: 1px solid var(--border);
+            padding: 14px 18px;
+            border-radius: 16px;
+            box-shadow: 0 18px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #4cc9f0, #4895ef);
+            display: grid;
+            place-items: center;
+            font-size: 18px;
+            color: #09141f;
+        }
+
+        nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .city-btn {
+            border: 1px solid transparent;
+            padding: 8px 16px;
+            border-radius: 999px;
+            background: transparent;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .city-btn.active {
+            background: #1f2734;
+            color: var(--text);
+            border-color: #2c3747;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search {
+            display: flex;
+            align-items: center;
+            background: #161b24;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 8px 14px;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 14px;
+            min-width: 240px;
+        }
+
+        .search input {
+            background: transparent;
+            border: none;
+            color: var(--text);
+            outline: none;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .export-btn {
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            color: white;
+            background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .title-block {
+            margin: 34px 0 24px;
+        }
+
+        .title-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 40px;
+            letter-spacing: -0.5px;
+        }
+
+        .badge {
+            background: #112431;
+            color: #5fd0ff;
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .subtitle {
+            margin-top: 12px;
+            max-width: 720px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .metrics {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .metric-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::after {
+            content: "";
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+        }
+
+        .metric-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .metric-change {
+            font-size: 12px;
+            color: #5eead4;
+        }
+
+        .metric-card.orange .metric-change {
+            color: #fbbf24;
+        }
+
+        .metric-card.blue .metric-change {
+            color: #38bdf8;
+        }
+
+        @media (max-width: 900px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-actions {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search {
+                min-width: 0;
+            }
+        }
     </style>
 </head>
 <body>
-<h1>📊 Mon dashboard</h1>
-<div class="grid">
-    <div class="card">
-        <h2>Revenus mensuels</h2>
-        <canvas id="chart-revenu"></canvas>
-    </div>
-    <div class="card">
-        <h2>Utilisateurs</h2>
-        <canvas id="chart-users"></canvas>
-    </div>
+<div class="page">
+    <header>
+        <div class="brand">
+            <div class="brand-icon">🌤️</div>
+            <div>Climate France</div>
+        </div>
+        <nav>
+            <button class="city-btn active">Paris</button>
+            <button class="city-btn">Lyon</button>
+            <button class="city-btn">Marseille</button>
+            <button class="city-btn">Bordeaux</button>
+        </nav>
+        <div class="header-actions">
+            <label class="search">
+                🔍
+                <input type="search" placeholder="Rechercher une ville..." />
+            </label>
+            <button class="export-btn">⬇️ Exporter</button>
+        </div>
+    </header>
+
+    <section class="title-block">
+        <div class="title-row">
+            <h1>Paris</h1>
+            <span class="badge">Station ID · 71490</span>
+        </div>
+        <p class="subtitle">
+            Analyse comparative approfondie des tendances climatiques et des précipitations observées de 1900 à 2025.
+            Données basées sur les relevés historiques de Météo-France.
+        </p>
+    </section>
+
+    <section class="metrics">
+        <article class="metric-card orange">
+            <div class="metric-title">Température moyenne</div>
+            <div class="metric-value">14,3°C</div>
+            <div class="metric-change">+1,8% vs 1980</div>
+        </article>
+        <article class="metric-card">
+            <div class="metric-title">Température max</div>
+            <div class="metric-value">38,9°C</div>
+            <div class="metric-change">+2,4% vs 1980</div>
+        </article>
+        <article class="metric-card blue">
+            <div class="metric-title">Précipitation</div>
+            <div class="metric-value">640 mm</div>
+            <div class="metric-change">-5,2% vs 1980</div>
+        </article>
+    </section>
 </div>
-
-<script>
-    async function main() {
-      const res = await fetch("../data/series.json");  // chemin depuis /site vers /data
-      const d = await res.json();
-
-      new Chart(document.getElementById('chart-revenu'), {
-        type: 'line',
-        data: {
-          labels: d.labels,
-          datasets: [{
-            label: 'Revenu (€)',
-            data: d.revenu,
-            borderColor: '#3b82f6',
-            tension: 0.3
-          }]
-        }
-      });
-
-      new Chart(document.getElementById('chart-users'), {
-        type: 'bar',
-        data: {
-          labels: d.labels,
-          datasets: [{
-            label: 'Utilisateurs',
-            data: d.users,
-            backgroundColor: '#10b981'
-          }]
-        },
-        options: { plugins: { legend: { display: true } } }
-      });
-    }
-    main();
-</script>
 </body>
 </html>

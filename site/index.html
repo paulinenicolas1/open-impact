@@ -225,6 +225,26 @@
             color: #38bdf8;
         }
 
+        .section-divider {
+            margin: 28px 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .section-divider h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .section-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
         @media (max-width: 900px) {
             header {
                 flex-direction: column;
@@ -292,6 +312,10 @@
             <div class="metric-value" data-metric="rainfall">Donnée indisponible</div>
             <div class="metric-change" data-metric="rainfallChange">Donnée indisponible</div>
         </article>
+    </section>
+
+    <section class="section-divider">
+        <h2>Analyse des températures</h2>
     </section>
 </div>
 <script src="app.js?v=20260116"></script>

@@ -279,18 +279,18 @@
     <section class="metrics">
         <article class="metric-card orange">
             <div class="metric-title">Température moyenne en <span data-year-label></span></div>
-            <div class="metric-value" data-metric="avgTemp">14,3°C</div>
-            <div class="metric-change" data-metric="avgTempChange">+1,8% vs 1980</div>
+            <div class="metric-value" data-metric="avgTemp">Donnée indisponible</div>
+            <div class="metric-change" data-metric="avgTempChange">Donnée indisponible</div>
         </article>
         <article class="metric-card">
             <div class="metric-title">Température max en <span data-year-label></span></div>
-            <div class="metric-value" data-metric="maxTemp">38,9°C</div>
-            <div class="metric-change" data-metric="maxTempChange">+2,4% vs 1980</div>
+            <div class="metric-value" data-metric="maxTemp">Donnée indisponible</div>
+            <div class="metric-change" data-metric="maxTempChange">Donnée indisponible</div>
         </article>
         <article class="metric-card blue">
             <div class="metric-title">Précipitation en <span data-year-label></span></div>
-            <div class="metric-value" data-metric="rainfall">640 mm</div>
-            <div class="metric-change" data-metric="rainfallChange">-5,2% vs 1980</div>
+            <div class="metric-value" data-metric="rainfall">Donnée indisponible</div>
+            <div class="metric-change" data-metric="rainfallChange">Donnée indisponible</div>
         </article>
     </section>
 </div>
@@ -302,50 +302,22 @@
         Paris: {
             stationId: "Station ID · 71490",
             summary: summaryText,
-            metrics: {
-                avgTemp: "14,3°C",
-                avgTempChange: "+1,8% vs 1980",
-                maxTemp: "38,9°C",
-                maxTempChange: "+2,4% vs 1980",
-                rainfall: "640 mm",
-                rainfallChange: "-5,2% vs 1980",
-            },
+            metrics: {},
         },
         Lyon: {
             stationId: "Station ID · 29821",
             summary: summaryText,
-            metrics: {
-                avgTemp: "13,1°C",
-                avgTempChange: "+2,1% vs 1980",
-                maxTemp: "39,4°C",
-                maxTempChange: "+3,0% vs 1980",
-                rainfall: "820 mm",
-                rainfallChange: "-3,4% vs 1980",
-            },
+            metrics: {},
         },
         Marseille: {
             stationId: "Station ID · 55807",
             summary: summaryText,
-            metrics: {
-                avgTemp: "15,9°C",
-                avgTempChange: "+2,6% vs 1980",
-                maxTemp: "41,2°C",
-                maxTempChange: "+3,7% vs 1980",
-                rainfall: "510 mm",
-                rainfallChange: "-6,8% vs 1980",
-            },
+            metrics: {},
         },
         Bordeaux: {
             stationId: "Station ID · 66342",
             summary: summaryText,
-            metrics: {
-                avgTemp: "14,8°C",
-                avgTempChange: "+1,9% vs 1980",
-                maxTemp: "40,1°C",
-                maxTempChange: "+3,2% vs 1980",
-                rainfall: "900 mm",
-                rainfallChange: "-2,6% vs 1980",
-            },
+            metrics: {},
         },
     };
 
@@ -499,7 +471,16 @@
         cityName.textContent = city;
         stationId.textContent = data.stationId;
         citySummary.textContent = data.summary;
+        const baseMetrics = {
+            avgTemp: "Donnée indisponible",
+            avgTempChange: "Donnée indisponible",
+            maxTemp: "Donnée indisponible",
+            maxTempChange: "Donnée indisponible",
+            rainfall: "Donnée indisponible",
+            rainfallChange: "Donnée indisponible",
+        };
         const metrics = {
+            ...baseMetrics,
             ...data.metrics,
             ...getComputedMetrics(city),
         };

@@ -41,13 +41,13 @@ jobs:
       - name: Prepare static site
         run: |
           set -euxo pipefail
-          ls -lah dist
-          test -f dist/index.html
-          touch dist/.nojekyll
+          ls -lah site
+          test -f site/index.html
+          touch site/.nojekyll
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: site
 
   deploy:
     # ✅ ne déploie que sur push main (pas sur PR)

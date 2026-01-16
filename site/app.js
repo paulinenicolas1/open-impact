@@ -124,7 +124,7 @@ const toNumber = (value) => {
 
 const loadYearlyMetrics = async () => {
     try {
-        const response = await fetch("data/output/final_yearly.csv");
+        const response = await fetch("site/data/output/final_yearly.csv");
         if (!response.ok) {
             return;
         }

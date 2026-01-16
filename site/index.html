@@ -336,7 +336,7 @@
     const citySummary = document.getElementById("city-summary");
     const metricNodes = document.querySelectorAll("[data-metric]");
     const yearLabels = document.querySelectorAll("[data-year-label]");
-    const lastFullYear = new Date().getFullYear() - 1;
+    const lastFullYear = Number.parseInt(new Date().getFullYear() - 1, 10);
     const yearlyMetrics = new Map();
 
     yearLabels.forEach((label) => {
@@ -428,7 +428,7 @@
             const text = await response.text();
             const rows = parseCsv(text);
             rows.forEach((row) => {
-                const year = Number(row.AAAA);
+                const year = Number.parseInt(String(row.AAAA).trim(), 10);
                 if (year !== lastFullYear) {
                     return;
                 }

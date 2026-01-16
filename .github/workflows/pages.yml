@@ -38,12 +38,12 @@ jobs:
       - name: Copy final yearly data to site
         run: |
           set -euxo pipefail
-          if [ -f data/output/final_yearly.csv ]; then
-            mkdir -p site/data/output
-            cp data/output/final_yearly.csv site/data/output/final_yearly.csv
-          else
-            echo "::warning::data/output/final_yearly.csv not found; skipping copy."
+          if [ ! -f data/output/final_yearly.csv ]; then
+            echo "::error::Expected data/output/final_yearly.csv but it was not found in the repo workspace."
+            exit 1
           fi
+          mkdir -p site/data/output
+          cp data/output/final_yearly.csv site/data/output/final_yearly.csv
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

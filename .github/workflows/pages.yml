@@ -25,28 +25,33 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install uv
-        run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          export PATH="$HOME/.local/bin:$PATH"
-          uv --version
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v3
+
       - name: Sync dependencies with uv
-        run: |
-          export PATH="$HOME/.local/bin:$PATH"
-          uv sync
+        run: uv sync
+
       - name: Run main
         run: uv run python -m src.main
-        working-directory: ${{ github.workspace }}
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
       - name: Prepare static site
         run: |
-          # dist/ contient déjà index.html
+          set -euxo pipefail
           ls -lah dist
-          touch dist/.nojekyll   # évite Jekyll, au cas où
+          test -f dist/index.html
+          touch dist/.nojekyll
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
   deploy:
+    # ✅ ne déploie que sur push main (pas sur PR)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     environment:

@@ -35,6 +35,12 @@ jobs:
       - name: Run main
         run: uv run python -m src.main
 
+      - name: Copy final yearly data to site
+        run: |
+          set -euxo pipefail
+          mkdir -p site/data/output
+          cp data/output/final_yearly.csv site/data/output/final_yearly.csv
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 

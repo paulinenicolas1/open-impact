@@ -78,6 +78,11 @@
             background: transparent;
             color: var(--muted);
             font-size: 14px;
+            cursor: pointer;
+        }
+
+        .city-btn:hover {
+            color: var(--text);
         }
 
         .city-btn.active {
@@ -239,10 +244,10 @@
             <div>Climate France</div>
         </div>
         <nav>
-            <button class="city-btn active">Paris</button>
-            <button class="city-btn">Lyon</button>
-            <button class="city-btn">Marseille</button>
-            <button class="city-btn">Bordeaux</button>
+            <button class="city-btn active" data-city="Paris" aria-pressed="true">Paris</button>
+            <button class="city-btn" data-city="Lyon" aria-pressed="false">Lyon</button>
+            <button class="city-btn" data-city="Marseille" aria-pressed="false">Marseille</button>
+            <button class="city-btn" data-city="Bordeaux" aria-pressed="false">Bordeaux</button>
         </nav>
         <div class="header-actions">
             <label class="search">
@@ -255,10 +260,10 @@
 
     <section class="title-block">
         <div class="title-row">
-            <h1>Paris</h1>
-            <span class="badge">Station ID · 71490</span>
+            <h1 id="city-name">Paris</h1>
+            <span class="badge" id="station-id">Station ID · 71490</span>
         </div>
-        <p class="subtitle">
+        <p class="subtitle" id="city-summary">
             Analyse comparative approfondie des tendances climatiques et des précipitations observées de 1900 à 2025.
             Données basées sur les relevés historiques de Météo-France.
         </p>
@@ -267,20 +272,108 @@
     <section class="metrics">
         <article class="metric-card orange">
             <div class="metric-title">Température moyenne</div>
-            <div class="metric-value">14,3°C</div>
-            <div class="metric-change">+1,8% vs 1980</div>
+            <div class="metric-value" data-metric="avgTemp">14,3°C</div>
+            <div class="metric-change" data-metric="avgTempChange">+1,8% vs 1980</div>
         </article>
         <article class="metric-card">
             <div class="metric-title">Température max</div>
-            <div class="metric-value">38,9°C</div>
-            <div class="metric-change">+2,4% vs 1980</div>
+            <div class="metric-value" data-metric="maxTemp">38,9°C</div>
+            <div class="metric-change" data-metric="maxTempChange">+2,4% vs 1980</div>
         </article>
         <article class="metric-card blue">
             <div class="metric-title">Précipitation</div>
-            <div class="metric-value">640 mm</div>
-            <div class="metric-change">-5,2% vs 1980</div>
+            <div class="metric-value" data-metric="rainfall">640 mm</div>
+            <div class="metric-change" data-metric="rainfallChange">-5,2% vs 1980</div>
         </article>
     </section>
 </div>
+<script>
+    const cityData = {
+        Paris: {
+            stationId: "Station ID · 71490",
+            summary:
+                "Analyse comparative approfondie des tendances climatiques et des précipitations observées de 1900 à 2025. Données basées sur les relevés historiques de Météo-France.",
+            metrics: {
+                avgTemp: "14,3°C",
+                avgTempChange: "+1,8% vs 1980",
+                maxTemp: "38,9°C",
+                maxTempChange: "+2,4% vs 1980",
+                rainfall: "640 mm",
+                rainfallChange: "-5,2% vs 1980",
+            },
+        },
+        Lyon: {
+            stationId: "Station ID · 29821",
+            summary:
+                "Synthèse des variations thermiques urbaines et des épisodes pluvieux sur la métropole lyonnaise depuis 1900.",
+            metrics: {
+                avgTemp: "13,1°C",
+                avgTempChange: "+2,1% vs 1980",
+                maxTemp: "39,4°C",
+                maxTempChange: "+3,0% vs 1980",
+                rainfall: "820 mm",
+                rainfallChange: "-3,4% vs 1980",
+            },
+        },
+        Marseille: {
+            stationId: "Station ID · 55807",
+            summary:
+                "Panorama des tendances méditerranéennes avec suivi des canicules et des précipitations intenses depuis 1900.",
+            metrics: {
+                avgTemp: "15,9°C",
+                avgTempChange: "+2,6% vs 1980",
+                maxTemp: "41,2°C",
+                maxTempChange: "+3,7% vs 1980",
+                rainfall: "510 mm",
+                rainfallChange: "-6,8% vs 1980",
+            },
+        },
+        Bordeaux: {
+            stationId: "Station ID · 66342",
+            summary:
+                "Analyse climatique de l'Atlantique sud-ouest avec focus sur la pluviométrie et les records saisonniers.",
+            metrics: {
+                avgTemp: "14,8°C",
+                avgTempChange: "+1,9% vs 1980",
+                maxTemp: "40,1°C",
+                maxTempChange: "+3,2% vs 1980",
+                rainfall: "900 mm",
+                rainfallChange: "-2,6% vs 1980",
+            },
+        },
+    };
+
+    const cityButtons = document.querySelectorAll(".city-btn");
+    const cityName = document.getElementById("city-name");
+    const stationId = document.getElementById("station-id");
+    const citySummary = document.getElementById("city-summary");
+    const metricNodes = document.querySelectorAll("[data-metric]");
+
+    const updateDashboard = (city) => {
+        const data = cityData[city];
+        if (!data) {
+            return;
+        }
+        cityName.textContent = city;
+        stationId.textContent = data.stationId;
+        citySummary.textContent = data.summary;
+        metricNodes.forEach((node) => {
+            const key = node.dataset.metric;
+            node.textContent = data.metrics[key];
+        });
+    };
+
+    cityButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            cityButtons.forEach((item) => {
+                item.classList.remove("active");
+                item.setAttribute("aria-pressed", "false");
+            });
+            button.classList.add("active");
+            button.setAttribute("aria-pressed", "true");
+            updateDashboard(button.dataset.city);
+        });
+    });
+</script>
 </body>
 </html>

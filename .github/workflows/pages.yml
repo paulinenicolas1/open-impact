@@ -43,6 +43,8 @@ jobs:
           set -euxo pipefail
           ls -lah site
           test -f site/index.html
+          mkdir -p site/data/output
+          cp data/output/final_yearly.csv site/data/output/final_yearly.csv
           touch site/.nojekyll
 
       - uses: actions/upload-pages-artifact@v3

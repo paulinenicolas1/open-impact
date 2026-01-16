@@ -271,28 +271,30 @@
 
     <section class="metrics">
         <article class="metric-card orange">
-            <div class="metric-title">Température moyenne</div>
+            <div class="metric-title">Température moyenne en <span data-year-label></span></div>
             <div class="metric-value" data-metric="avgTemp">14,3°C</div>
             <div class="metric-change" data-metric="avgTempChange">+1,8% vs 1980</div>
         </article>
         <article class="metric-card">
-            <div class="metric-title">Température max</div>
+            <div class="metric-title">Température max en <span data-year-label></span></div>
             <div class="metric-value" data-metric="maxTemp">38,9°C</div>
             <div class="metric-change" data-metric="maxTempChange">+2,4% vs 1980</div>
         </article>
         <article class="metric-card blue">
-            <div class="metric-title">Précipitation</div>
+            <div class="metric-title">Précipitation en <span data-year-label></span></div>
             <div class="metric-value" data-metric="rainfall">640 mm</div>
             <div class="metric-change" data-metric="rainfallChange">-5,2% vs 1980</div>
         </article>
     </section>
 </div>
 <script>
+    const summaryText =
+        "Analyse comparative approfondie des tendances climatiques et des précipitations observées de 1900 à 2025. Données basées sur les relevés historiques de Météo-France.";
+
     const cityData = {
         Paris: {
             stationId: "Station ID · 71490",
-            summary:
-                "Analyse comparative approfondie des tendances climatiques et des précipitations observées de 1900 à 2025. Données basées sur les relevés historiques de Météo-France.",
+            summary: summaryText,
             metrics: {
                 avgTemp: "14,3°C",
                 avgTempChange: "+1,8% vs 1980",
@@ -304,8 +306,7 @@
         },
         Lyon: {
             stationId: "Station ID · 29821",
-            summary:
-                "Synthèse des variations thermiques urbaines et des épisodes pluvieux sur la métropole lyonnaise depuis 1900.",
+            summary: summaryText,
             metrics: {
                 avgTemp: "13,1°C",
                 avgTempChange: "+2,1% vs 1980",
@@ -317,8 +318,7 @@
         },
         Marseille: {
             stationId: "Station ID · 55807",
-            summary:
-                "Panorama des tendances méditerranéennes avec suivi des canicules et des précipitations intenses depuis 1900.",
+            summary: summaryText,
             metrics: {
                 avgTemp: "15,9°C",
                 avgTempChange: "+2,6% vs 1980",
@@ -330,8 +330,7 @@
         },
         Bordeaux: {
             stationId: "Station ID · 66342",
-            summary:
-                "Analyse climatique de l'Atlantique sud-ouest avec focus sur la pluviométrie et les records saisonniers.",
+            summary: summaryText,
             metrics: {
                 avgTemp: "14,8°C",
                 avgTempChange: "+1,9% vs 1980",
@@ -348,6 +347,12 @@
     const stationId = document.getElementById("station-id");
     const citySummary = document.getElementById("city-summary");
     const metricNodes = document.querySelectorAll("[data-metric]");
+    const yearLabels = document.querySelectorAll("[data-year-label]");
+    const lastFullYear = new Date().getFullYear() - 1;
+
+    yearLabels.forEach((label) => {
+        label.textContent = lastFullYear;
+    });
 
     const updateDashboard = (city) => {
         const data = cityData[city];
